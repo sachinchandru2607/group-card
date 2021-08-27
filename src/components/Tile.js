@@ -1,11 +1,16 @@
-const Tile = () => {
+const Tile = ({name,imgUrl}) => {
+
+    const onDragStart = (e) => {
+        e.dataTransfer.setData("text", e.target.id);
+    };
+
     return  (
-        <div className = "tile">
+        <div draggable = "true"  onDragStart = {onDragStart} id = "main-tile" className = "tile">
             <div className = "tile-header">
-                <label>Header</label>
+                <label>{name}</label>
             </div>
             <div className = "tile-content">
-                <p>Lorem ipsum dolor sit igula ulue neque V viverra accumsan in nisl nisi scelerisque eu. Ultricies integer quis auctor elit sed vulputate mi. In massa tempor nec feugiat nisl.</p>
+               <img src = {imgUrl} alt = {name} />
             </div>
         </div>
     );

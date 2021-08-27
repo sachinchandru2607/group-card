@@ -1,25 +1,45 @@
-import { useEffect,useRef, useState } from "react";
 import Tile from "./Tile";
 
-const Group = ({header}) => {
-    const [tile, setTile] = useState(0);
-    let tileDisplay = useRef([]);
-    const handleAddTile = () => {
-        setTile((prevState) => (prevState + 1));
+const Group = ({usersList,header}) => {
+
+    const getUserDetail = () => {
+        const users = getFilterdAccounts();
+        const tiles = users.map(({login,avatar_url}) => {
+            return <Tile key = {login} name = {login} imgUrl = {avatar_url}/>
+        });
+        return tiles;
     };
-    useEffect(() => {
-        tileDisplay.current.push(<Tile />);
-    },[tile]);
+
+    const getFilterdAccounts = () => {
+        if(header === "Even") {
+            return usersList.filter((val, index) => {
+                return index % 2 === 0;
+            });
+        }
+        else {
+            return usersList.filter((val, index) => {
+                return index % 2;
+            });
+        }
+    }
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        var data = e.dataTransfer.getData("text");
+        var element = document.getElementById(data);
+        e.target.appendChild(element);
+    };
+
     return(
         <div className = "group-card">
             <div className = "header">
                 {header}
             </div>
             <div className = "content">
-             {tile > 0 ? tileDisplay.current : <div className = "no-data-msg">No data found</div>}
+            <div className = "no-data-msg" onDrop = {handleDrop} onDragOver = {(e) => e.preventDefault()}>{getUserDetail()}</div>
             </div>
             <div className = "footer"> 
-                <button onClick = {handleAddTile}>Add</button>
+                <button>Add</button>
             </div>
         </div>
     );
